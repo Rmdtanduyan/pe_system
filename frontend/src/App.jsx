@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import { useGoogleLogin } from '@react-oauth/google';
-
+import client from './api/client'; 
 function App() {
   // State to hold the user's ID number
   const [idNumber, setIdNumber] = useState('');
@@ -39,23 +39,12 @@ function App() {
               email: userInfoData.email,
               // Add other fields as needed
           });
-
-          fetch('http://127.0.0.1:8000/api/profile/', {    // Send user data to Django API using a POST request
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },body: JSON.stringify({
-                idNumber: idNumber,
-                sub: userInfoData.sub,
-                name: userInfoData.name,
-                email: userInfoData.email,
-            }),
+          const response = await client.post('api/User/', {
+            idNumber: idNumber,
+            sub: userInfoData.sub,
+            name: userInfoData.name,
+            email: userInfoData.email,
           });
-        })
-        .catch((error) => { // Handle errors if any occur during the Google login process
-          console.error('Error processing Google login:', error);
-        });
-    },
   });
 
   return (

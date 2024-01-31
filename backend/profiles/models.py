@@ -16,6 +16,3 @@ class User(models.Model):
 class Subjects(models.Model):
     prof = models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
     class_codes = models.CharField(max_length=255)
-
-
-Rmdtanduyan

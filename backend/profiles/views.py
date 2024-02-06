@@ -33,6 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
 
         if user_exists:
             return Response({'detail': 'User already registered'}, status=status.HTTP_200_OK)
+        
         else:
             return Response({'detail': 'User not registered'}, status=status.HTTP_200_OK)   
             
@@ -59,11 +60,16 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
             return Response({'detail': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class SubjectsViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
-    queryset = models.Subjects.objects.all() #models.py class Todo(models.Model)
-    serializer_class = serializers.SubjectsSerializer #import sa serilaizers.py class TodoSerializers()
+class StaffViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
+    queryset = models.Staff.objects.all() #models.py class Todo(models.Model)
+    serializer_class = serializers.StaffSerializer #import sa serilaizers.py class TodoSerializers()
 
     def get_serializer_class(self):
         if self.action == 'create':
-            return serializers.SubjectsCreateSerializer
-        return serializers.SubjectsSerializer
+            return serializers.StaffSerializer
+        return serializers.StaffSerializer
+    
+
+class PEChoiceViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
+    queryset = models.PEChoice.objects.all() #models.py class Todo(models.Model)
+    serializer_class = serializers.PEChoiceSerializer #import sa serilaizers.py class TodoSerializers()

@@ -1,3 +1,4 @@
+// client.js
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -5,7 +6,7 @@ import Cookies from 'js-cookie';
 const authToken = Cookies.get('authToken');
 
 const client = axios.create({
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: 'http://127.0.0.1:8000', // Update this line
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFToken',
   withCredentials: true,

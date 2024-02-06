@@ -1,9 +1,7 @@
-// App.jsx
-import React, { useState } from 'react';
-import './App.css';
-import { useGoogleLogin } from '@react-oauth/google';
-import client from './api/client'; 
-function App() {
+//LoginButton.jsx
+import React from 'react'
+
+const LoginButton = () => {
   // State to hold the user's ID number
   const [idNumber, setIdNumber] = useState('');
 
@@ -54,21 +52,7 @@ function App() {
   });
 
   return (
-    <>
-      {/* Input field for entering ID number */}
-      <input
-        type="text"
-        id="inputField"
-        placeholder="Enter ID number"
-        value={idNumber}
-        onChange={handleIdNumberChange}
-      />
-
-      {/* Button to trigger the Google login */}
-      <button onClick={Login} disabled={!isIdNumberValid}>
-        Sign Up
-      </button>
-    </>
-  );
+    <button onClick={Login} disabled={!isIdNumberValid}>Sign Up</button>
+  )
 }
-export default App;
+export default LoginButton

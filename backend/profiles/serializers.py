@@ -9,10 +9,11 @@ UserModel = get_user_model()
 class UserRegisterSerializer(serializers.ModelSerializer): #for signup
     class Meta:
         model = UserModel
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['idNumber', 'first_name', 'last_name', 'email']
 
     def create(self, data):
         user = UserModel.objects.create_user(
+            idNumber = data['idNumber'],
             email = data['email'],
             first_name = data['first_name'],
             last_name = data['last_name'],
@@ -30,16 +31,29 @@ class UserLoginSerializer(serializers.Serializer): #for login
             raise ValidationError('User not found')
         return user
     
+
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Staff
+        fields = '__all__'
 class UserSerializer(serializers.ModelSerializer):
+    # staff = StaffSerializer() - ask about kay andrew
     class Meta:
-        model = models.User
-        fields = '__all__'
-class SubjectsSerializer(serializers.ModelSerializer):
-    prof = UserSerializer()
+        model = UserModel
+        exclude = ['password','department','bio'] #walay apil sa json
+        
+class PEChoiceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Subjects
+        model = models.PEChoice
         fields = '__all__'
-class SubjectsCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Subjects
-        fields = '__all__'
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = models.User
+#         fields = '__all__'
+# class StaffSerializer(serializers.ModelSerializer):
+#     staff = UserSerializer()
+
+#     class Meta:
+#         model = models.Staff
+#         fields = '__all__'
+    

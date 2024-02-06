@@ -1,3 +1,4 @@
+#settings.py
 """
 Django settings for backend project.
 
@@ -50,7 +51,30 @@ INSTALLED_APPS = [
     #   Internal Apps
       'profiles',
 ]
+# added from 53 to 76
+# You can adjust this to fit your needs, but for development, allowing all methods and headers is common.
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_CREDENTIALS = True
 MIDDLEWARE = [    
       'corsheaders.middleware.CorsMiddleware', #added
       'django.middleware.security.SecurityMiddleware',

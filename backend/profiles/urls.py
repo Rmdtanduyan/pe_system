@@ -11,6 +11,7 @@ router.register('PE',views.PEChoiceViewSet, basename='PE')
 # dili mapasa ang json file sa backend kung kini imong gamiton
 urlpatterns = [
     path('api/', include(router.urls)),
+    
     # # other urlpatterns if any
 ]
 urlpatterns += router.urls #used to extend the router register in the url patterns

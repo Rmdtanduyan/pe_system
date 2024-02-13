@@ -27,15 +27,16 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
         user = serializer.create(request.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def checkregister(self, request):
         email = request.data.get('email', None)
         user_exists = models.User.objects.filter(email=email).exists()
-
+        print(f"Checking registration for email: {email}")
+        print(f"User exists: {user_exists}")
         if user_exists:
             return Response({'detail': 'User already registered'}, status=status.HTTP_200_OK)
-        
         else:
-            return Response({'detail': 'User not registered'}, status=status.HTTP_200_OK)   
+            return Response({'detail': 'User not registered'}, status=status.HTTP_202_ACCEPTED)   
             
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])
     def login(self, request):
@@ -59,7 +60,12 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
         else:
             return Response({'detail': 'User not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
 
-
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def get_logged_in_user_details(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+    
 class StaffViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
     queryset = models.Staff.objects.all() #models.py class Todo(models.Model)
     serializer_class = serializers.StaffSerializer #import sa serilaizers.py class TodoSerializers()

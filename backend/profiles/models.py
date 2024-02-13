@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, UserManager
 from django.utils import timezone
-from multiselectfield import MultiSelectField
+# from multiselectfield import MultiSelectField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
@@ -84,10 +84,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Staff(models.Model):
-    POSITION_DEPARTMENT_CHAIR = 'Department Chair'
     POSITION_ADMIN_ASSOCIATE = 'Admin Associate'
     POSITION_CHOICES = [
-        ('Department Chair', 'Department Chair'),
         ('Admin Associate', 'Admin Associate'),
         ('Full-Time Faculty', 'Full-Time Faculty'),
         ('Part-Time Faculty', 'Part-Time Faculty')
@@ -104,8 +102,8 @@ class Staff(models.Model):
 
     def save(self, *args, **kwargs):
         # Ensure only one director and exists at a time
-        if self.position in [self.POSITION_DEPARTMENT_CHAIR, self.POSITION_ADMIN_ASSOCIATE]:
-            Staff.objects.filter(position__in=[self.POSITION_DEPARTMENT_CHAIR, self.POSITION_ADMIN_ASSOCIATE, ...]).exclude(user=self.user).delete()
+        if self.position in [self.POSITION_ADMIN_ASSOCIATE]:
+            Staff.objects.filter(position__in=[self.POSITION_ADMIN_ASSOCIATE, ...]).exclude(user=self.user).delete()
         super().save(*args, **kwargs)
 
 class PEChoice(models.Model):
@@ -115,20 +113,3 @@ class PEChoice(models.Model):
 
     def __str__(self):
         return self.choice
-
-    #If the position is set as 'Director', it ensures that only one director exists at a time by deleting any other 
-    #staff members with the position 'Director' (excluding the current one) before saving the new instance.
-    # def save(self, *args,**kwargs):
-    #     if self.position in [self.POSITION_DEPARTMENT_CHAIR, self.POSITION_ADMIN_ASSOCIATE]:
-    #         Staff.objects.filter(position__in=[self.POSITION_DEPARTMENT_CHAIR, self.POSITION_ADMIN_ASSOCIATE]).exclude(user=self.user).delete()
-    #     super().save(*args, **kwargs)
-    # Staff.object - maintain consistency and ensure that only one 
-    #staff member holds the positions 'Department Chair' or 'Admin Associate' at a time
-
-# PE_CATEGORIES = {
-    #     'PE1': {'Boxing': ['16-244', '16-245', '16-247'], 'Taekwando': ['16-244', '16-245', '16-247'],
-    #             'Exercises': ['16-244', '16-245', '16-247']},
-    #     'PE2': {'Dance': ['16-244', '16-245', '16-247']},
-    #     'PE3': {'Basketball': ['16-244', '16-245', '16-247'], 'Volleyball': ['16-248', '16-249', '16-250']},
-    #     'PE4': {'Table Tennis': ['16-244', '16-245', '16-247'], 'Badminton': ['16-244', '16-245', '16-247']}
-    # }

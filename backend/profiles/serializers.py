@@ -35,15 +35,21 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Staff
         fields = '__all__'
+        extra_kwargs = {'position': {'required': False}}
 class UserSerializer(serializers.ModelSerializer):
     staff = StaffSerializer()
     class Meta:
         model = UserModel
         exclude = ['password'] #walay apil sa json
         
-class PEChoiceSerializer(serializers.ModelSerializer):
+class ClassCodesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.PEChoice
+        model = models.ClassCodes
+        fields = '__all__'
+
+class ClassListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ClassList
         fields = '__all__'
 
     

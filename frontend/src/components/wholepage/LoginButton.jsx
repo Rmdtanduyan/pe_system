@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
-import client from "../../api/client"; // Importing API client
+import client from "../../api/client";
 import Cookies from "js-cookie"; // Importing Cookies library for managing cookies
 
 function LoginButton() {

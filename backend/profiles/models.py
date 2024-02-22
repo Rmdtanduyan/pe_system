@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 # models.py
 # Create your models here.
 # for data tables
-
 # manage database queries and operations for a specific model.
 
 class CustomUserManager(UserManager): # Custom manager for the user model    
@@ -105,11 +104,13 @@ class Staff(models.Model):
         if self.position in [self.POSITION_ADMIN_ASSOCIATE]:
             Staff.objects.filter(position__in=[self.POSITION_ADMIN_ASSOCIATE, ...]).exclude(user=self.user).delete()
         super().save(*args, **kwargs)
+class ClassCodes(models.Model):
+    classcode = models.CharField(max_length=255) #admin
 
-class PEChoice(models.Model):
+class ClassList(models.Model):
     professor = models.ForeignKey(Staff,on_delete=models.CASCADE)
-    choice = models.CharField(max_length=255) #admin
+    classcodes = models.ForeignKey(ClassCodes,on_delete=models.CASCADE)
     students = models.ManyToManyField(User, related_name='pe_choices')
-
+    
     def __str__(self):
         return self.choice

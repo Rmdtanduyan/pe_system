@@ -66,16 +66,22 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
         serializer = UserSerializer(user)
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
     
-class StaffViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
-    queryset = models.Staff.objects.all() #models.py class Todo(models.Model)
-    serializer_class = serializers.StaffSerializer #import sa serilaizers.py class TodoSerializers()
+class StaffViewSet(viewsets.ModelViewSet):
+    queryset = models.Staff.objects.all()
+    serializer_class = serializers.StaffSerializer
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return serializers.StaffSerializer
-        return serializers.StaffSerializer
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
     
 
-class PEChoiceViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
-    queryset = models.PEChoice.objects.all() #models.py class Todo(models.Model)
-    serializer_class = serializers.PEChoiceSerializer #import sa serilaizers.py class TodoSerializers()
+class ClassCodesViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
+    queryset = models.ClassCodes.objects.all() #models.py class Todo(models.Model)
+    serializer_class = serializers.ClassCodesSerializer #import sa serilaizers.py class TodoSerializers()
+
+class ClassListViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
+    queryset = models.ClassList.objects.all() #models.py class Todo(models.Model)
+    serializer_class = serializers.ClassListSerializer #import sa serilaizers.py class TodoSerializers()

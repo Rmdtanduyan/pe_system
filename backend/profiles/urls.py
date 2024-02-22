@@ -5,8 +5,9 @@ from django.urls import path,include
 
 router = routers.DefaultRouter()
 router.register('User',views.UserViewSet, basename='User') #naa sa views.py Class TodoViewSet()
-router.register('Staffs',views.StaffViewSet, basename='Staffs') 
-router.register('PE',views.PEChoiceViewSet, basename='PE') 
+router.register('Staffs/Faculties',views.StaffViewSet, basename='Staffs/Faculties') 
+router.register('Class Codes',views.ClassCodesViewSet, basename='Class Codes')
+router.register('Class List',views.ClassListViewSet, basename='Class List')  
 # router.register(r'profile',views.UserInfoViewSet) #para isa lang makita sa api instaead of 2 routers
 # dili mapasa ang json file sa backend kung kini imong gamiton
 urlpatterns = [

@@ -11,7 +11,7 @@ function Home() {
   console.log(userData.user.staff?.position);
   console.log(userData.user.first_name);
   console.log(userData.user.last_name);
-  const isAdmin = userData?.user?.staff?.position === "Admin Associate";
+  const isAdmin = userData?.user?.staff?.position === "Office";
   
   return (
     

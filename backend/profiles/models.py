@@ -83,9 +83,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Staff(models.Model):
-    POSITION_ADMIN_ASSOCIATE = 'Admin Associate'
+    POSITION_OFFICE = 'Office'
     POSITION_CHOICES = [
-        ('Admin Associate', 'Admin Associate'),
+        ('Office', 'Office'),
+        ('Admin', 'Admin'),
+        ('Department Chair', 'Department Chair'),
         ('Full-Time Faculty', 'Full-Time Faculty'),
         ('Part-Time Faculty', 'Part-Time Faculty')
     ]
@@ -101,8 +103,8 @@ class Staff(models.Model):
 
     def save(self, *args, **kwargs):
         # Ensure only one director and exists at a time
-        if self.position in [self.POSITION_ADMIN_ASSOCIATE]:
-            Staff.objects.filter(position__in=[self.POSITION_ADMIN_ASSOCIATE, ...]).exclude(user=self.user).delete()
+        if self.position in [self.POSITION_OFFICE]:
+            Staff.objects.filter(position__in=[self.POSITION_OFFICE, ...]).exclude(user=self.user).delete()
         super().save(*args, **kwargs)
 class ClassCodes(models.Model):
     classcode = models.CharField(max_length=255) #admin

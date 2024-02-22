@@ -13,6 +13,8 @@ from .serializers import (
     UserRegisterSerializer,
     UserLoginSerializer,
     UserSerializer,
+    CreateStaffSerializer,
+    StaffSerializer
 )
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
@@ -69,7 +71,10 @@ class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelVi
 class StaffViewSet(viewsets.ModelViewSet):
     queryset = models.Staff.objects.all()
     serializer_class = serializers.StaffSerializer
-
+    def get_serializer_class(self):
+            if self.action == 'create':
+                return CreateStaffSerializer
+            return StaffSerializer
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)

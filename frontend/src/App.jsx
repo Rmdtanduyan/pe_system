@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './components/wholepage/LoginPage';
 import Home from './components/wholepage/Home';
 import { useAuth } from './context/AuthContext';
-import FacultyList from './components/Admin/Facultylist';
+import Facultypage from './pages/Admin/facultypage';
 function App() {
   // Extract isLoggedIn and userData from useAuth hook
   const { isLoggedIn, userData } = useAuth();
@@ -34,8 +34,8 @@ function App() {
           }
         />
         {/* Protected route for faculty page, only accessible to users with admin associate position */}
-        {isLoggedIn && userData?.user?.staff?.position === "Admin Associate" && (
-          <Route path="/facultylist" element={<FacultyList />} />
+        {isLoggedIn && userData?.user?.staff?.position === "Office" && (
+          <Route path="/faculty" element={<Facultypage />} />
         )}
       </Routes>
     </Router>

@@ -1,6 +1,5 @@
-// AddFaculty.jsx
-import Select from 'react-select';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios';
 
 const AddFaculty = ({ onAddFaculty }) => {
@@ -49,8 +48,9 @@ const AddFaculty = ({ onAddFaculty }) => {
 
   return (
     <div>
+      
       {!showInput ? (
-        <button  className="btn" onClick={handleAddClick}>Add Faculty</button>
+        <button className="btn" onClick={handleAddClick}>Add Faculty</button>
       ) : (
         <div>
           <input
@@ -70,7 +70,7 @@ const AddFaculty = ({ onAddFaculty }) => {
           {searchResults.map((user) => (
             <li key={user.id}>
               {user.first_name} {user.last_name}
-              <button  className="btn" onClick={() => handleAddFaculty(user)}>Add</button>
+              <button className="btn" onClick={() => handleAddFaculty(user)}>Add</button>
             </li>
           ))}
         </ul>

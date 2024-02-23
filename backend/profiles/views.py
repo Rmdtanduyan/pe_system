@@ -17,9 +17,13 @@ from .serializers import (
     StaffSerializer
 )
 # Create your views here.
-class UserViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
-    queryset = models.User.objects.all() #models.py class Todo(models.Model)
-    serializer_class = serializers.UserSerializer #import sa serilaizers.py class TodoSerializers()
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.UserSerializer
+    queryset = models.User.objects.all()
+   
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['first_name', 'last_name']
+    
 
     
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])

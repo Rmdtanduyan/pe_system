@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
-
+import client from "../../api/client";
 const Facultylist = () => {
   const [listofStaff, setListofStaff] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [listofUser, setListofUser] = useState([]);
   const { userData } = useAuth();
-
+  const [searchQuery, setSearchQuery] = useState('');
   //fetching the data of "http://127.0.0.1:8000/api/Staffs/Faculties/" and http://127.0.0.1:8000/api/User/
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const staffResponse = await axios.get(
-        "http://127.0.0.1:8000/api/Staffs/Faculties/"
+      const staffResponse = await client.get( //shortcut key for axios
+        "api/Staffs/Faculties/"
       );
 
-      const UserResponse = await axios.get("http://127.0.0.1:8000/api/User/");
+      const UserResponse = await client.get(
+        `/api/User/?search=${searchQuery}` );
 
       setListofStaff(staffResponse.data);
       setListofUser(UserResponse.data);
+
+      console.log("Staff: ",staffResponse.data);
+      
+      console.log("User: ",   UserResponse.data);
       setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -29,7 +34,7 @@ const Facultylist = () => {
       setIsLoading(false);
     }
   };
-
+  
   // for remove
   const handleRemove = async (id) => {
     if (
@@ -44,12 +49,13 @@ const Facultylist = () => {
       }
     }
   };
-
   //for search
 
   useEffect(() => {
+
     fetchData();
-  }, []);
+   
+  }, [searchQuery]);
 
   return (
     <div className="container mx-auto py-8">
@@ -79,13 +85,13 @@ const Facultylist = () => {
 
             {/* Text input for department and Add Faculty button */}
             <div className="w-full">
-              <input
-                type="text"
-                id="department"
-                name="department"
-                className="w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 mb-4"
-                placeholder="Search a User"
-              />
+            <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for users..."
+            className="input input-bordered w-full max-w-xs"
+          />
               {/* MANUAL ADDED  (CONSULT TO ANDREW IF WE USE USE AUTH)*/}
               <div className="flex flex-col w-full">
                 {isLoading ? (
@@ -93,15 +99,16 @@ const Facultylist = () => {
                 ) : error ? (
                   <div>Error: {error}</div>
                 ) : (
-                  listofStaff.map((person, index) => (
+                  listofUser.map((person, index) => (
                     // Wrap each name and button in a div to align them next to each other
                     <div
                       key={index}
                       className="flex justify-between items-center mb-2"
                     >
                       <h2 className="text-lg font-semibold flex-grow">
-                        {person.user.first_name} {person.user.last_name}
+                        {person.first_name} {person.last_name}
                       </h2>
+
                       <button
                         onClick={() => {
                           /* function to handle addition */

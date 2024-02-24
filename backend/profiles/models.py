@@ -108,6 +108,7 @@ class Staff(models.Model):
         super().save(*args, **kwargs)
 class ClassCodes(models.Model):
     classcode = models.CharField(max_length=255) #admin
+    date_joined = models.DateTimeField(default=timezone.now,blank=True)
 
 class ClassList(models.Model):
     professor = models.ForeignKey(Staff,on_delete=models.CASCADE)

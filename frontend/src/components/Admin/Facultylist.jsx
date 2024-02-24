@@ -1,31 +1,31 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useAuth } from "../../context/AuthContext";
 import client from "../../api/client";
-const Facultylist = () => {
-  const [listofStaff, setListofStaff] = useState([]);
+import { useAuth } from "../../context/AuthContext";
+
+const FacultyList = () => {
+  const [listOfStaff, setListOfStaff] = useState([]);
+  const [listOfUsers, setListOfUsers] = useState([]);
+  const [listofClassCodes, setListofClassCodes] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [listofUser, setListofUser] = useState([]);
-  const { userData } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
-  //fetching the data of "http://127.0.0.1:8000/api/Staffs/Faculties/" and http://127.0.0.1:8000/api/User/
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState("");
+  const [editFacultyId, setEditFacultyId] = useState(null); // State to track which faculty member is being edited
+  const [classCodeInput, setClassCodeInput] = useState("");
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const staffResponse = await client.get( //shortcut key for axios
-        "api/Staffs/Faculties/"
-      );
+      const staffResponse = await client.get("api/Staffs/Faculties/");
+      const userResponse = await client.get(`/api/User/?search=${searchQuery}`);
+      const codeResponse = await client.get(`/api/Classcodes/`);
 
-      const UserResponse = await client.get(
-        `/api/User/?search=${searchQuery}` );
+      setListOfStaff(staffResponse.data);
+      setListOfUsers(userResponse.data);
+      setListofClassCodes(codeResponse.data);
 
-      setListofStaff(staffResponse.data);
-      setListofUser(UserResponse.data);
-
-      console.log("Staff: ",staffResponse.data);
-      
-      console.log("User: ",   UserResponse.data);
+      console.log("Staff: ", staffResponse.data);
+      console.log("User: ", userResponse.data);
+      console.log("Class Codes: ", codeResponse.data);
       setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -34,14 +34,13 @@ const Facultylist = () => {
       setIsLoading(false);
     }
   };
-  
-  // for remove
+
   const handleRemove = async (id) => {
     if (
       window.confirm("Are you sure you want to remove this faculty member?")
     ) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/Staffs/Faculties/${id}/`);
+        await client.delete(`api/Staffs/Faculties/${id}/`);
         console.log("Faculty member removed successfully.");
         fetchData();
       } catch (error) {
@@ -49,30 +48,74 @@ const Facultylist = () => {
       }
     }
   };
-  //for search
+
+  const handleAdd = async (id) => {
+    if (window.confirm("Are you sure you want to add this faculty member?")) {
+      try {
+        const payload = {
+          user: id,
+          position: "Part-Time Faculty",
+        };
+
+        await client.post(`api/Staffs/Faculties/`, payload);
+        fetchData(); // Fetch data after adding the faculty member
+      } catch (error) {
+        console.error("Error adding faculty member:", error);
+      }
+    }
+  };
+
+  const handleEdit = async (id) => {
+    if (window.confirm("Are you sure you want to edit this faculty member?")) {
+      try {
+        const payload = {
+          position: selectedPosition,
+        };
+
+        await client.patch(`api/Staffs/Faculties/${id}/`, payload);
+        fetchData(); // Fetch data after editing the faculty member
+      } catch (error) {
+        console.error("Error editing faculty member:", error);
+      }
+    }
+    setEditFacultyId(null); // Reset editFacultyId after editing
+  };
+
+  const handleAddClassCode = async () => {
+    if (window.confirm(" Are you sure you want to add a Class Code?")) {
+      try {
+        const payload = {
+          classcode: classCodeInput,
+        };
+
+        await client.post("api/Classcodes/", payload);
+        console.log("Class code added successfully.");
+        fetchData();
+      } catch (error) {
+        console.error("Error adding a class code", error);
+      }
+    }
+  };
 
   useEffect(() => {
-
     fetchData();
-   
   }, [searchQuery]);
 
   return (
     <div className="container mx-auto py-8">
-      {/* You can open the modal using document.getElementById('ID').showModal() method */}
       <button
         className="btn"
         onClick={() => document.getElementById("add_faculty").showModal()}
       >
         Add Faculty
       </button>
+
       <br />
       <br />
 
       <dialog id="add_faculty" className="modal">
         <div className="modal-box">
           <form method="dialog" className="p-6 flex flex-col">
-            {/* Close button */}
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
               onClick={() => document.getElementById("add_faculty").close()}
@@ -80,133 +123,183 @@ const Facultylist = () => {
               ✕
             </button>
 
-            {/* Form content */}
             <h3 className="font-bold text-lg mb-4">Search</h3>
 
-            {/* Text input for department and Add Faculty button */}
             <div className="w-full">
-            <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for users..."
-            className="input input-bordered w-full max-w-xs"
-          />
-              {/* MANUAL ADDED  (CONSULT TO ANDREW IF WE USE USE AUTH)*/}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for users..."
+                className="input input-bordered w-full max-w-xs"
+              />
               <div className="flex flex-col w-full">
-                {isLoading ? (
-                  <div>Loading...</div>
-                ) : error ? (
-                  <div>Error: {error}</div>
-                ) : (
-                  listofUser.map((person, index) => (
-                    // Wrap each name and button in a div to align them next to each other
-                    <div
-                      key={index}
-                      className="flex justify-between items-center mb-2"
-                    >
-                      <h2 className="text-lg font-semibold flex-grow">
-                        {person.first_name} {person.last_name}
-                      </h2>
-
-                      <button
-                        onClick={() => {
-                          /* function to handle addition */
-                        }}
-                        className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                {searchQuery && // Only render when searchQuery is not empty
+                  (isLoading ? (
+                    <div>Loading...</div>
+                  ) : error ? (
+                    <div>Error: {error}</div>
+                  ) : (
+                    listOfUsers.map((user, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between items-center mb-2"
                       >
-                        Add
-                      </button>
-                    </div>
-                  ))
-                )}
+                        <h2 className="text-lg font-semibold flex-grow">
+                          {user.first_name} {user.last_name}
+                        </h2>
+                        <button
+                          onClick={() => handleAdd(user.id)}
+                          className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    ))
+                  ))}
               </div>
             </div>
-
-            {/* Additional form fields can be added here */}
           </form>
           <p className="py-4">Press ESC key or click on ✕ button to close</p>
         </div>
       </dialog>
 
+      <button
+        className="btn"
+        onClick={() => document.getElementById("add_classCode").showModal()}
+      >
+        Add Class Codes
+      </button>
+      <dialog id="add_classCode" className="modal">
+        <div className="modal-box flex flex-col items-center justify-center">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2">
+              ✕
+            </button>
+          </form>
+          <br></br>
+          <br></br>
+          <div className="flex items-center mb-4">
+            <input
+              type="text"
+              placeholder="Input"
+              className="input input-bordered w-full max-w-xs mr-2"
+              onChange={(e) => setClassCodeInput(e.target.value)}
+            />
+            <button
+              onClick={handleAddClassCode}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Add
+            </button>
+          </div>
+          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+        </div>
+      </dialog>
+
+      {/* You can open the modal using document.getElementById('ID').showModal() method */}
+      <button
+        className="btn"
+        onClick={() => document.getElementById("my_modal_3").showModal()}
+      >
+        Show Class Codes
+      </button>
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+        </div>
+      </dialog>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {isLoading ? (
           <div>Loading...</div>
         ) : error ? (
           <div>Error: {error}</div>
         ) : (
-          listofStaff.map((person, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md p-4">
-              <img
-                src="profile.jpg"
-                alt="Profile"
-                className="w-full h-64  object-cover mb-4"
-              />
-              <h2 className="text-lg font-semibold mb-2">
-                {person.user.first_name} {person.user.last_name}
-              </h2>
-              <p className="text-gray-600 mb-2">{person.user.staff.position}</p>
-              {person.user.staff.position !== "Office" && (
+          listOfStaff
+            // Filter out office staff
+            .filter((staff) => staff.user.staff.position !== "Office")
+            .map((staff, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-md p-4">
+                <img
+                  src="profile.jpg"
+                  alt="Profile"
+                  className="w-full h-64  object-cover mb-4"
+                />
+                <h2 className="text-lg font-semibold mb-2">
+                  {staff.user.first_name} {staff.user.last_name}
+                </h2>
+                <p className="text-gray-600 mb-2">
+                  {staff.user.staff.position}
+                </p>
                 <div className="flex justify-end">
-                  {/* You can open the modal using document.getElementById('ID').showModal() method */}
                   <button
-                    className="btn mr-2 bg-blue-500 text-white border border-blue-500"  // Added margin-right to create space
-                    onClick={() =>
-                      document.getElementById("my_modal_3").showModal()
-                    }
+                    className="btn mr-2 bg-blue-500 text-white border border-blue-500"
+                    onClick={() => setEditFacultyId(staff.user.id)}
                   >
                     Edit Details
                   </button>
-                  <dialog id="my_modal_3" className="modal">
-                    <div className="modal-box">
-                      <form method="dialog">
-                        {/* if there is a button in form, it will close the modal */}
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                          ✕
-                        </button>
-                      </form>
-                      <div className="mb-4">
-                        <label
-                          htmlFor="department"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Select Position
-                        </label>
-                        <select
-                          id="department"
-                          name="department"
-                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                        >
-                          <option value="Director">Director</option>
-                          <option value="Admin">Admin</option>
-                          <option value="Part-Time Faculty">
-                            Part-Time Faculty
-                          </option>
-                          <option value="Full-Time Faculty">
-                            Full-Time Faculty
-                          </option>
-                        </select>
-                      </div>
-
-                      <p className="py-4">
-                        Press ESC key or click on ✕ button to close
-                      </p>
-                    </div>
-                  </dialog>
                   <button
-                    onClick={() => handleRemove(person.user.staff.user)}
+                    onClick={() => handleRemove(staff.user.id)}
                     className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
                   >
                     Remove
                   </button>
                 </div>
-              )}
-            </div>
-          ))
+              </div>
+            ))
         )}
       </div>
+
+      {/* Dialog for editing faculty member */}
+      {editFacultyId && (
+        <dialog id="my_modal_3" className="modal" open>
+          <div className="modal-box">
+            <form method="dialog" className="p-6 flex flex-col">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                onClick={() => setEditFacultyId(null)}
+              >
+                ✕
+              </button>
+              <div className="mb-4">
+                <label
+                  htmlFor="department"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Select Position
+                </label>
+                <select
+                  id="department"
+                  name="department"
+                  value={selectedPosition}
+                  onChange={(e) => setSelectedPosition(e.target.value)}
+                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                >
+                  <option value="Director">Director</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Part-Time Faculty">Part-Time Faculty</option>
+                  <option value="Full-Time Faculty">Full-Time Faculty</option>
+                </select>
+              </div>
+              <button
+                className="btn mr-2 bg-blue-500 text-white border border-blue-500"
+                onClick={() => handleEdit(editFacultyId)}
+              >
+                Edit Faculty Member
+              </button>
+            </form>
+            <p className="py-4">Press ESC key or click on ✕ button to close</p>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };
 
-export default Facultylist;
+export default FacultyList;

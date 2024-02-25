@@ -107,9 +107,21 @@ class Staff(models.Model):
             Staff.objects.filter(position__in=[self.POSITION_OFFICE, ...]).exclude(user=self.user).delete()
         super().save(*args, **kwargs)
 class ClassCodes(models.Model):
-    classcode = models.CharField(max_length=255) #admin
-    date_joined = models.DateTimeField(default=timezone.now,blank=True)
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'),
+        ('Saturday', 'Saturday'),
+    ]
 
+    classcode = models.CharField(max_length=255)
+    date_joined = models.DateTimeField(default=timezone.now, blank=True)
+    day_sched = models.CharField(max_length=10, choices=DAY_CHOICES)
+    time_start = models.TimeField()
+    time_end = models.TimeField()
+    
 class ClassList(models.Model):
     professor = models.ForeignKey(Staff,on_delete=models.CASCADE)
     classcodes = models.ForeignKey(ClassCodes,on_delete=models.CASCADE)

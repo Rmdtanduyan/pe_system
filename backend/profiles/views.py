@@ -91,6 +91,9 @@ class ClassCodesViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., M
     queryset = models.ClassCodes.objects.all() #models.py class Todo(models.Model)
     serializer_class = serializers.ClassCodesSerializer #import sa serilaizers.py class TodoSerializers()
 
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['classcode', 'time_start','time_end', 'day_sched']
 class ClassListViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
     queryset = models.ClassList.objects.all() #models.py class Todo(models.Model)
     serializer_class = serializers.ClassListSerializer #import sa serilaizers.py class TodoSerializers()
+    queryset = models.ClassList.objects.all()

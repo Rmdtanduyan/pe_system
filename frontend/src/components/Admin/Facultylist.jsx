@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import client from "../../api/client";
+import Codelist from "./Codelist";
 
 const FacultyList = () => {
   const [listOfStaff, setListOfStaff] = useState([]);
@@ -78,16 +79,20 @@ const FacultyList = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <div className="container mx-auto py-8 flex justify-between">
-        <div>
+      <div className="container mx-auto py-8">
+        <div className="flex justify-between items-center">
           <button
             className="btn"
             onClick={() => document.getElementById("add_faculty").showModal()}
           >
             Add Faculty
           </button>
+          <div>
+            <Codelist />
+          </div>
         </div>
       </div>
+
       <br />
       <br />
 

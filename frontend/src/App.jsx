@@ -8,6 +8,7 @@ import Home from './components/wholepage/Home';
 import { useAuth } from './context/AuthContext';
 import Facultypage from './pages/Admin/facultypage';
 import ClassCodeList from './components/Admin/ClassCodeList';
+import Codelist from './components/Admin/Codelist';
 function App() {
   // Extract isLoggedIn and userData from useAuth hook
   const { isLoggedIn, userData } = useAuth();
@@ -39,6 +40,7 @@ function App() {
           <>
           <Route path="/faculty" element={<Facultypage />} />
           <Route path="/ClassCodeList" element={<ClassCodeList />} />
+          <Route path="/CodeList" element={<Codelist />} />
           </>
         )}
       </Routes>

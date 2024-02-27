@@ -126,6 +126,6 @@ class ClassList(models.Model):
     professor = models.ForeignKey(Staff,on_delete=models.CASCADE)
     classcodes = models.ForeignKey(ClassCodes,on_delete=models.CASCADE)
     students = models.ManyToManyField(User, related_name='pe_choices')
-    
+    #add schoolyear
     def __str__(self):
         return self.choice

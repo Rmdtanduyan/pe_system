@@ -7,7 +7,6 @@ const Facultypage = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Navbar */}
       <Navbar />
-      
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Faculty Management</h1>
@@ -19,6 +18,7 @@ const Facultypage = () => {
           </div>
         </div>
       </div>
+      
     </div>
   );
 };

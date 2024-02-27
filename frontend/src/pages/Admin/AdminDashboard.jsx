@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 function AdminDashboard() {
   return (
+    
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white shadow-xl rounded-lg overflow-hidden grid sm:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
         {/* Each Link/Tile */}

@@ -7,6 +7,7 @@ import LoginPage from './components/wholepage/LoginPage';
 import Home from './components/wholepage/Home';
 import { useAuth } from './context/AuthContext';
 import Facultypage from './pages/Admin/facultypage';
+import ClassCodeList from './components/Admin/ClassCodeList';
 function App() {
   // Extract isLoggedIn and userData from useAuth hook
   const { isLoggedIn, userData } = useAuth();
@@ -35,7 +36,10 @@ function App() {
         />
         {/* Protected route for faculty page, only accessible to users with admin associate position */}
         {isLoggedIn && userData?.user?.staff?.position === "Office" && (
+          <>
           <Route path="/faculty" element={<Facultypage />} />
+          <Route path="/ClassCodeList" element={<ClassCodeList />} />
+          </>
         )}
       </Routes>
     </Router>

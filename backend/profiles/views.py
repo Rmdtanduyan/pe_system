@@ -14,7 +14,9 @@ from .serializers import (
     UserLoginSerializer,
     UserSerializer,
     CreateStaffSerializer,
-    StaffSerializer
+    StaffSerializer,
+    CreateClassListSerializer,
+    ClassListSerializer
 )
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -22,7 +24,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
    
     filter_backends = [filters.SearchFilter]
-    search_fields = ['first_name', 'last_name']
+    search_fields = ['first_name', 'last_name', 'email']
     
 
     
@@ -93,7 +95,13 @@ class ClassCodesViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., M
 
     filter_backends = [filters.SearchFilter]
     search_fields = ['classcode', 'time_start','time_end', 'day_sched']
-class ClassListViewSet(viewsets.ModelViewSet):# Specify the base class (e.g., ModelViewSet)
-    queryset = models.ClassList.objects.all() #models.py class Todo(models.Model)
-    serializer_class = serializers.ClassListSerializer #import sa serilaizers.py class TodoSerializers()
+class ClassListViewSet(viewsets.ModelViewSet):
     queryset = models.ClassList.objects.all()
+    serializer_class = ClassListSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['classcodes']
+# FIX ERROR HERE FOR THE SEARCHQUERY
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateClassListSerializer
+        return ClassListSerializer

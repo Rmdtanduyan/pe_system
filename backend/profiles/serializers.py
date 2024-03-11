@@ -70,6 +70,16 @@ class ClassCodesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ClassListSerializer(serializers.ModelSerializer):
+    professor = StaffSerializer(read_only=True)
+    classcodes = ClassCodesSerializer(read_only=True)
+    students = UserSerializer(many=True,read_only=True)
+    
+    class Meta:
+        model = ClassList
+        fields = '__all__'
+
+class CreateClassListSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ClassList
         fields = '__all__'

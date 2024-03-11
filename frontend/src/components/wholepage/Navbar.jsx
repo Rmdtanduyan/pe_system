@@ -1,21 +1,25 @@
-import React from 'react'
-import LoginButton from './LoginButton'
+import React from 'react';
+import LoginButton from './LoginButton';
+
 const Navbar = () => {
   return (
     <div>
-      <div className="navbar bg-blue-700">
-        <div className="flex-1">
-          <a className="btn btn-ghost text-xl">
-            PHYSICAL EDUCATION DEPARTMENT OFFICE
-          </a>
+      <div className="navbar bg-blue-700 py-4 px-6 flex justify-between items-center">
+        <div className="flex items-center">
+          <img
+            src="logo.png"
+            alt="Logo"
+            className="w-16 h-16 mr-4"
+          />
+          <a className="text-white text-xl font-bold">PHYSICAL EDUCATION DEPARTMENT OFFICE</a>
         </div>
-        <div className="flex-none">
-          <button className="btn btn-square btn-ghost">
+        <div className="flex items-center">
+          <button className="btn btn-square btn-ghost mr-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="inline-block w-5 h-5 stroke-current"
+              className="w-6 h-6 stroke-current"
             >
               <path
                 strokeLinecap="round"
@@ -29,7 +33,7 @@ const Navbar = () => {
         </div>
       </div> 
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

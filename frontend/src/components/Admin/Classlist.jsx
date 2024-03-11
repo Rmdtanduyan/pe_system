@@ -1,32 +1,34 @@
-//Codelist.jsx
 import React, { useState, useEffect } from "react";
 import client from "../../api/client";
-import AddClassCode from "./AddClassCode";
 import AddClassList from "./AddClassList";
-const Codelist = () => {
+
+const Classlist = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [listOfStaff, setListOfStaff] = useState([]);
-  const [listOfClassCodes, setlistOfClassCodes] = useState([]);
-  const [listOfClasslist, setListofClasslist] = useState([]);
+  const [listOfClassCodes, setListOfClassCodes] = useState([]);
+  const [listOfClasslist, setListOfClasslist] = useState([]);
   const [listOfUsers, setListOfUsers] = useState([]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const codeResponse = await client.get(`/api/Classcodes/?search=${searchQuery}`);
+      const classCodeResponse = await client.get(
+        `/api/Classcodes/?search=${searchQuery}`
+      );
       const staffResponse = await client.get("api/Staffs/Faculties/");
       const userResponse = await client.get(`/api/User/`);
-      const classListResponse = await client.get(`api/Classlist/`);
-  
-      setlistOfClassCodes(codeResponse.data); // Update the state of class codes here
-  
+      const classListResponse = await client.get(
+        `api/Classlist/?search=${searchQuery}`
+      );
+
+      setListOfClassCodes(classCodeResponse.data); // Update the state of class codes here
+
       setListOfStaff(staffResponse.data);
       setListOfUsers(userResponse.data);
-      setListofClasslist(classListResponse.data);
-      console.log(codeResponse.data);
+      setListOfClasslist(classListResponse.data);
       setError(null);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -35,9 +37,17 @@ const Codelist = () => {
       setIsLoading(false);
     }
   };
-  
-
-  //added by gpt
+  const handleRemoveClasslist = async (id) => {
+    if (window.confirm("Are you sure you want to remove this classlist?")) {
+      try {
+        await client.delete(`/api/Classlist/${id}/`);
+        console.log("Classlist deleted sucessfully.");
+        fetchData();
+      } catch (error) {
+        console.error("Failed to remove the class code:", error);
+      }
+    }
+  };
   const formatTime = (time) => {
     const [hours, minutes, seconds] = time.split(":").map(Number);
 
@@ -57,20 +67,8 @@ const Codelist = () => {
 
     return formattedTime;
   };
-  const handleRemoveClassCode = async (id) => {
-    if (window.confirm("Are you sure you want to remove this class Code?")) {
-      try {
-        await client.delete(`/api/Classcodes/${id}/`);
-        console.log("Class Code deleted sucessfully.");
-        fetchData();
-      } catch (error) {
-        console.error("Failed to remove the class code:", error);
-      }
-    }
-  };
 
   const updateData = () => {
-    // Call fetchData to fetch the updated list of class codes
     fetchData();
   };
 
@@ -79,19 +77,18 @@ const Codelist = () => {
   }, [searchQuery]);
 
   return (
-    <div className="container mx-auto py-8">
+    <div>
       <button
-        className="btn mr-2"
-        onClick={() => document.getElementById("show_classCodes").showModal()}
+        className="btn"
+        onClick={() => document.getElementById("show_classlist").showModal()}
       >
-        Show Class Codes
+        Show Classlist
       </button>
-
-      <dialog id="show_classCodes" className="modal">
+      <dialog id="show_classlist" className="modal">
         <div className="modal-box max-w-6xl" style={{ height: "600px" }}>
           <button
             className="btn btn-sm btn-circle btn-ghost absolute top-2 right-2"
-            onClick={() => document.getElementById("show_classCodes").close()}
+            onClick={() => document.getElementById("show_classlist").close()}
           >
             ✕
           </button>
@@ -110,8 +107,14 @@ const Codelist = () => {
               </div>
             </form>
           </div>
+
           <div>
-            <AddClassCode updateData={updateData} />
+            <AddClassList
+              listOfStaff={listOfStaff}
+              listOfUsers={listOfUsers}
+              listOfClassCodes={listOfClassCodes}
+              updateData={updateData}
+            />
           </div>
           <div className="flex flex-col p-6">
             {isLoading ? (
@@ -119,31 +122,32 @@ const Codelist = () => {
             ) : error ? (
               <div>Error: {error}</div>
             ) : (
-              listOfClassCodes.length > 0 &&
-              listOfClassCodes
+              listOfClasslist.length > 0 &&
+              listOfClasslist
                 .slice()
                 .reverse()
-                .map((code, index) => (
+                .map((classlist, index) => (
                   <div
                     key={index}
                     className="flex justify-between items-center mb-2"
                   >
                     <div>
                       <h2 className="text-lg font-semibold">
-                        {code.classcode} ( S.Y. {code.sy_start} - {code.sy_end})
+                        {classlist.classcodes.classcode} ({"S.Y"} {classlist.classcodes.sy_start} - {classlist.classcodes.sy_end}) | Prof:{" "}
+                        {classlist.professor.user.first_name}{" "}
+                        {classlist.professor.user.last_name}
                       </h2>
                       <p>
-                        {formatTime(code.time_start)} -{" "}
-                        {formatTime(code.time_end)} ({code.day_sched})
+                        {formatTime(classlist.classcodes.time_start)} -{" "}
+                        {formatTime(classlist.classcodes.time_end)} (
+                        {classlist.classcodes.day_sched})
                       </p>
                     </div>
                     <div>
-                      <button className="ml-4 bg-white hover:bg-gray-100 text-black font-bold py-2 px-4 rounded border border-gray-300">
-                        Edit
-                      </button>
                       <button
                         className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleRemoveClassCode(code.id)}
+                        onClick={() => handleRemoveClasslist(classlist.id)}
+
                       >
                         Delete
                       </button>
@@ -159,4 +163,4 @@ const Codelist = () => {
   );
 };
 
-export default Codelist;
+export default Classlist;

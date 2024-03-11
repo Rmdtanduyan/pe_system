@@ -1,6 +1,7 @@
 //Home.jsx
 import React from "react";
 function Visitor() {
+  
   return (
     <>
       <div className="bg-white w-full h-full	" >

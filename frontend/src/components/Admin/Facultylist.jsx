@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import client from "../../api/client";
 import Codelist from "./Codelist";
+import Classlist from "./Classlist";
 
 const FacultyList = () => {
   const [listOfStaff, setListOfStaff] = useState([]);
   const [listOfUsers, setListOfUsers] = useState([]);
+  
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,7 +90,10 @@ const FacultyList = () => {
             Add Faculty
           </button>
           <div>
-            <Codelist />
+            <Codelist/>
+          </div>
+          <div>
+            <Classlist/>
           </div>
         </div>
       </div>

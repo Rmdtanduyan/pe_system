@@ -174,8 +174,8 @@ function LoginButton() {
         <div className="flex items-center justify-center">
           <button
             onClick={Login}
-            className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline-blue active:bg-teal-800"
-          >
+            className="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline-blue active:bg-teal-800 w-full md:w-auto md:min-w-0 md:text-lg"
+            >
             Login
           </button>
         </div>

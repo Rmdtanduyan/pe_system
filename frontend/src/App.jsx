@@ -7,8 +7,11 @@ import LoginPage from './components/wholepage/LoginPage';
 import Home from './components/wholepage/Home';
 import { useAuth } from './context/AuthContext';
 import Facultypage from './pages/Admin/facultypage';
-import ClassCodeList from './components/Admin/ClassCodeList';
 import Codelist from './components/Admin/Codelist';
+import AddClassCode from './components/Admin/AddClassCode';
+import AddClassList from './components/Admin/AddClassList';
+import Classlist from './components/Admin/Classlist';
+import Working from './components/Admin/working';
 function App() {
   // Extract isLoggedIn and userData from useAuth hook
   const { isLoggedIn, userData } = useAuth();
@@ -38,9 +41,13 @@ function App() {
         {/* Protected route for faculty page, only accessible to users with admin associate position */}
         {isLoggedIn && userData?.user?.staff?.position === "Office" && (
           <>
-          <Route path="/faculty" element={<Facultypage />} />
-          <Route path="/ClassCodeList" element={<ClassCodeList />} />
-          <Route path="/CodeList" element={<Codelist />} />
+            <Route path="/faculty" element={<Facultypage />} />
+            <Route path="/CodeList" element={<Codelist />} />
+            <Route path="/Classlist" element={<Classlist />} />
+            <Route path="/AddClassCode" element={<AddClassCode />} />
+            <Route path="/AddClassList" element={<AddClassList />} />
+            <Route path="/Working" element={<Working />} />
+            
           </>
         )}
       </Routes>

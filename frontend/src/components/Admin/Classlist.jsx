@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import client from "../../api/client";
 import AddClassList from "./AddClassList";
+import EditClasslist from "./EditClasslist";
 
 const Classlist = () => {
   const [error, setError] = useState(null);
@@ -79,7 +80,7 @@ const Classlist = () => {
   return (
     <div>
       <button
-        className="btn"
+        className="btn btn-sm"
         onClick={() => document.getElementById("show_classlist").showModal()}
       >
         Show Classlist
@@ -127,32 +128,36 @@ const Classlist = () => {
                 .slice()
                 .reverse()
                 .map((classlist, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center mb-2"
-                  >
-                    <div>
-                      <h2 className="text-lg font-semibold">
-                        {classlist.classcodes.classcode} ({"S.Y"} {classlist.classcodes.sy_start} - {classlist.classcodes.sy_end}) | Prof:{" "}
-                        {classlist.professor.user.first_name}{" "}
-                        {classlist.professor.user.last_name}
-                      </h2>
-                      <p>
-                        {formatTime(classlist.classcodes.time_start)} -{" "}
-                        {formatTime(classlist.classcodes.time_end)} (
-                        {classlist.classcodes.day_sched})
-                      </p>
-                    </div>
-                    <div>
-                      <button
-                        className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => handleRemoveClasslist(classlist.id)}
-
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
+                  <div className="flex justify-between items-center mb-2">
+  <div>
+    <h2 className="text-lg font-semibold">
+      {classlist.classcodes.classcode} ({"S.Y"}{" "}
+      {classlist.classcodes.sy_start} -{" "}
+      {classlist.classcodes.sy_end}) | Prof:{" "}
+      {classlist.professor.user.first_name}{" "}
+      {classlist.professor.user.last_name}
+    </h2>
+    <p>
+      {formatTime(classlist.classcodes.time_start)} -{" "}
+      {formatTime(classlist.classcodes.time_end)} (
+      {classlist.classcodes.day_sched})
+    </p>
+  </div>
+  <div className="flex">
+    <EditClasslist
+      listOfStaff={listOfStaff}
+      listOfUsers={listOfUsers}
+      listOfClassCodes={listOfClassCodes}
+      updateData={updateData}
+    />
+    <button
+      className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      onClick={() => handleRemoveClasslist(classlist.id)}
+    >
+      Delete
+    </button>
+  </div>
+</div>
                 ))
             )}
           </div>

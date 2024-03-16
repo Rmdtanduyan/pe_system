@@ -50,6 +50,7 @@ INSTALLED_APPS = [
       'corsheaders',
     #   Internal Apps
       'profiles',
+      'items',
 ]
 # added from 53 to 76
 # You can adjust this to fit your needs, but for development, allowing all methods and headers is common.

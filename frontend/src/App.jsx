@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './components/wholepage/LoginPage';
 import Home from './components/wholepage/Home';
 import { useAuth } from './context/AuthContext';
-import Facultypage from './pages/Admin/facultypage';
+import Facultypage from './pages/Admin/FacultyPage';
 import Codelist from './components/Admin/Codelist';
 import AddClassCode from './components/Admin/AddClassCode';
 import AddClassList from './components/Admin/AddClassList';

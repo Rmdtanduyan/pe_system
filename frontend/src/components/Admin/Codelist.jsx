@@ -81,7 +81,7 @@ const Codelist = () => {
   return (
     <div className="container mx-auto py-8">
       <button
-        className="btn mr-2"
+        className="btn btn-sm"
         onClick={() => document.getElementById("show_classCodes").showModal()}
       >
         Show Class Codes

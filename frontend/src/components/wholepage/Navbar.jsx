@@ -4,22 +4,22 @@ import LoginButton from './LoginButton';
 const Navbar = () => {
   return (
     <div>
-      <div className="navbar bg-blue-700 py-4 px-6 flex justify-between items-center">
+      <div className="navbar bg-blue-700 py-2 px-4 flex justify-between items-center">
         <div className="flex items-center">
           <img
             src="logo.png"
             alt="Logo"
-            className="w-16 h-16 mr-4"
+            className="w-12 h-12 mr-2" // Smaller logo size
           />
-          <a className="text-white text-xl font-bold">PHYSICAL EDUCATION DEPARTMENT OFFICE</a>
+          <a className="text-white text-lg font-bold">PHYSICAL EDUCATION DEPARTMENT OFFICE</a> {/* Smaller text */}
         </div>
         <div className="flex items-center">
-          <button className="btn btn-square btn-ghost mr-4">
+          <button className="btn btn-square btn-ghost mr-2 text-sm"> {/* Smaller button and text */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="w-6 h-6 stroke-current"
+              className="w-4 h-4 stroke-current" // Smaller icon size
             >
               <path
                 strokeLinecap="round"
@@ -29,6 +29,7 @@ const Navbar = () => {
               ></path>
             </svg>
           </button>
+          {/* Assuming LoginButton is also styled with Tailwind, you might need to adjust its classes for size as well */}
           <LoginButton />
         </div>
       </div> 

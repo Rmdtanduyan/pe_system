@@ -133,25 +133,25 @@ const AddClassCode = ({ updateData }) => {
               />
             </div>
             <div className="my-4 w-full flex justify-between">
-  <input
-    type="number"
-    id="classCodeSyStart"
-    name="classCodeSyStart"
-    className="input input-bordered max-w-xs"
-    value={formData.classCodeSyStart}
-    onChange={handleChange}
-    placeholder="Start Year"
-  />
-  <input
-    type="number"
-    id="classCodeSyEnd"
-    name="classCodeSyEnd"
-    className="input input-bordered max-w-xs"
-    value={formData.classCodeSyEnd}
-    onChange={handleChange}
-    placeholder="End Year"
-  />
-</div>
+              <input
+                type="number"
+                id="classCodeSyStart"
+                name="classCodeSyStart"
+                className="input input-bordered max-w-xs"
+                value={formData.classCodeSyStart}
+                onChange={handleChange}
+                placeholder="Start Year"
+              />
+              <input
+                type="number"
+                id="classCodeSyEnd"
+                name="classCodeSyEnd"
+                className="input input-bordered max-w-xs"
+                value={formData.classCodeSyEnd}
+                onChange={handleChange}
+                placeholder="End Year"
+              />
+            </div>
 
             <div className="my-4">
               <button

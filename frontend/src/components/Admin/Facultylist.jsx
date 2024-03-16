@@ -6,12 +6,12 @@ import Classlist from "./Classlist";
 const FacultyList = () => {
   const [listOfStaff, setListOfStaff] = useState([]);
   const [listOfUsers, setListOfUsers] = useState([]);
-  
+
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPosition, setSelectedPosition] = useState("");
-  const [editFacultyId, setEditFacultyId] = useState(null); // State to track which faculty member is being edited
+  const [editFacultyId, setEditFacultyId] = useState(null);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -52,7 +52,7 @@ const FacultyList = () => {
         };
 
         await client.post(`api/Staffs/Faculties/`, payload);
-        fetchData(); // Fetch data after adding the faculty member
+        fetchData();
       } catch (error) {
         console.error("Error adding faculty member:", error);
       }
@@ -67,12 +67,12 @@ const FacultyList = () => {
         };
 
         await client.patch(`api/Staffs/Faculties/${id}/`, payload);
-        fetchData(); // Fetch data after editing the faculty member
+        fetchData();
       } catch (error) {
         console.error("Error editing faculty member:", error);
       }
     }
-    setEditFacultyId(null); // Reset editFacultyId after editing
+    setEditFacultyId(null);
   };
 
   useEffect(() => {
@@ -80,21 +80,19 @@ const FacultyList = () => {
   }, [searchQuery]);
 
   return (
-    <div className="container mx-auto py-8">
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center">
-          <button
-            className="btn"
-            onClick={() => document.getElementById("add_faculty").showModal()}
-          >
-            Add Faculty
-          </button>
-          <div>
-            <Codelist/>
-          </div>
-          <div>
-            <Classlist/>
-          </div>
+    <div className="container mx-auto py-4">
+      <div className="flex justify-between items-center">
+        <button
+          className="btn btn-sm"
+          onClick={() => document.getElementById("add_faculty").showModal()}
+        >
+          Add Faculty
+        </button>
+        <div>
+          <Codelist />
+        </div>
+        <div>
+          <Classlist />
         </div>
       </div>
 
@@ -103,7 +101,7 @@ const FacultyList = () => {
 
       <dialog id="add_faculty" className="modal">
         <div className="modal-box">
-          <form method="dialog" className="p-6 flex flex-col">
+          <form method="dialog" className="p-4 flex flex-col">
             <button
               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
               onClick={() => document.getElementById("add_faculty").close()}
@@ -111,7 +109,7 @@ const FacultyList = () => {
               ✕
             </button>
 
-            <h3 className="font-bold text-lg mb-4">Search</h3>
+            <h3 className="font-bold text-base mb-2">Search</h3>
 
             <div className="w-full">
               <input
@@ -122,7 +120,7 @@ const FacultyList = () => {
                 className="input input-bordered w-full max-w-xs"
               />
               <div className="flex flex-col w-full">
-                {searchQuery && // Only render when searchQuery is not empty
+                {searchQuery &&
                   (isLoading ? (
                     <div>Loading...</div>
                   ) : error ? (
@@ -133,12 +131,12 @@ const FacultyList = () => {
                         key={index}
                         className="flex justify-between items-center mb-2"
                       >
-                        <h2 className="text-lg font-semibold flex-grow">
+                        <h2 className="text-sm font-semibold flex-grow">
                           {user.first_name} {user.last_name}
                         </h2>
                         <button
                           onClick={() => handleAdd(user.id)}
-                          className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs"
                         >
                           Add
                         </button>
@@ -148,7 +146,7 @@ const FacultyList = () => {
               </div>
             </div>
           </form>
-          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+          <p className="py-2">Press ESC key or click on ✕ button to close</p>
         </div>
       </dialog>
 
@@ -159,31 +157,39 @@ const FacultyList = () => {
           <div>Error: {error}</div>
         ) : (
           listOfStaff
-            // Filter out office staff
             .filter((staff) => staff.user.staff.position !== "Office")
             .map((staff, index) => (
-              <div key={index} className="bg-white rounded-lg shadow-md p-4">
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-md p-2 flex flex-col justify-between w-48"
+              >
+                {" "}
+                {/* Adjusted width to w-48 */}
                 <img
                   src="profile.jpg"
                   alt="Profile"
-                  className="w-full h-64  object-cover mb-4"
+                  className="w-full h-32 object-cover mb-2" // Adjusted image size to h-32
                 />
-                <h2 className="text-lg font-semibold mb-2">
-                  {staff.user.first_name} {staff.user.last_name}
-                </h2>
-                <p className="text-gray-600 mb-2">
-                  {staff.user.staff.position}
-                </p>
+                <div>
+                  <h2 className="text-base font-semibold mb-1">
+                    {" "}
+                    {staff.user.first_name} {staff.user.last_name}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-1">
+                    {" "}
+                    {staff.user.staff.position}
+                  </p>
+                </div>
                 <div className="flex justify-end">
                   <button
-                    className="btn mr-2 bg-blue-500 text-white border border-blue-500"
+                    className="btn mr-1 bg-blue-500 text-white border border-blue-500 py-1 px-2 rounded text-sm" // Adjusted button size and font size to text-sm
                     onClick={() => setEditFacultyId(staff.user.id)}
                   >
                     Edit Details
                   </button>
                   <button
                     onClick={() => handleRemove(staff.user.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+                    className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded text-sm" // Adjusted button size and font size to text-sm
                   >
                     Remove
                   </button>
@@ -193,45 +199,38 @@ const FacultyList = () => {
         )}
       </div>
 
-      {/* Dialog for editing faculty member */}
       {editFacultyId && (
         <dialog id="edit_faculty " className="modal" open>
           <div className="modal-box">
-            <form method="dialog" className="p-6 flex flex-col">
+            <form method="dialog" className="p-4 flex flex-col">
               <button
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                 onClick={() => setEditFacultyId(null)}
               >
                 ✕
               </button>
-              <div className="mb-4">
-                <label
-                  htmlFor="department"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Select Position
-                </label>
-                <select
-                  id="department"
-                  name="department"
-                  value={selectedPosition}
-                  onChange={(e) => setSelectedPosition(e.target.value)}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                >
-                  <option value="Director">Director</option>
-                  <option value="Admin">Admin</option>
-                  <option value="Part-Time Faculty">Part-Time Faculty</option>
-                  <option value="Full-Time Faculty">Full-Time Faculty</option>
-                </select>
-              </div>
+              <select
+                id="classCodeDaySched"
+                name="classCodeDaySched"
+                className="input input-bordered w-full max-w-md"
+                value={selectedPosition}
+                onChange={(e) => setSelectedPosition(e.target.value)}
+              >
+                <option value="">Select Position</option>
+                <option value="Department Chair">Department Chair</option>
+                <option value="Admin">Admin</option>
+                <option value="Part-Time Faculty">Part-Time Faculty</option>
+                <option value="Full-Time Faculty">Full-Time Faculty</option>
+              </select>
+              <br />
               <button
-                className="btn mr-2 bg-blue-500 text-white border border-blue-500"
+                className="btn mr-1 bg-blue-500 text-white border border-blue-500 py-1 px-2 rounded text-xs"
                 onClick={() => handleEdit(editFacultyId)}
               >
                 Edit Faculty Member
               </button>
             </form>
-            <p className="py-4">Press ESC key or click on ✕ button to close</p>
+            <p className="py-2">Press ESC key or click on ✕ button to close</p>
           </div>
         </dialog>
       )}

@@ -12,6 +12,8 @@ import AddClassCode from './components/Admin/AddClassCode';
 import AddClassList from './components/Admin/AddClassList';
 import Classlist from './components/Admin/Classlist';
 import Working from './components/Admin/working';
+import ItemPage from './pages/Admin/ItemPage';
+import AddItem from './components/Admin/AddItem';
 function App() {
   // Extract isLoggedIn and userData from useAuth hook
   const { isLoggedIn, userData } = useAuth();
@@ -47,6 +49,8 @@ function App() {
             <Route path="/AddClassCode" element={<AddClassCode />} />
             <Route path="/AddClassList" element={<AddClassList />} />
             <Route path="/Working" element={<Working />} />
+            <Route path="/ItemPage" element={<ItemPage />} />
+            <Route path="/AddItem" element={<AddItem />} />
             
           </>
         )}

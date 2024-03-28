@@ -15,10 +15,9 @@ class ItemBorrow(models.Model):
 class ItemUnreturn(models.Model):
     unreturn_item = models.OneToOneField(ItemBorrow, on_delete=models.SET_NULL, related_name='item_unreturn', null=True)
 
-
 class UnreturnToReturn(models.Model):
-    unreturn_item_to_return = models.OneToOneField(ItemUnreturn, on_delete=models.CASCADE, related_name='item_return', null=True)
+    unreturn_item_to_return = models.ForeignKey(ItemUnreturn, on_delete=models.SET_NULL, related_name='item_return', null=True)
 
 class ItemReturn(models.Model):
-    return_item = models.OneToOneField(ItemBorrow, on_delete=models.SET_NULL, related_name='item_return', null=True)
+    return_item = models.ForeignKey(ItemBorrow, on_delete=models.SET_NULL, related_name='item_return', null=True)
     date_returned = models.DateTimeField(auto_now_add=True)

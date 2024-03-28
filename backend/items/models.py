@@ -1,4 +1,4 @@
-# models.py
+# items(models.py)
 from django.db import models
 import profiles.models
 

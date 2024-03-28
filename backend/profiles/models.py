@@ -66,7 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # position = models.CharField(max_length=255,default='student',blank=True) # added - automated as student 
 
 
-    is_staff = models.BooleanField(default=False) #
+    is_staff = models.BooleanField(default=False) #added by andrew
 
     objects = CustomUserManager() # Instance of the CustomUserManager class, which was defined in your previous code.
                                   # This manager provides methods for creating users and superusers.
